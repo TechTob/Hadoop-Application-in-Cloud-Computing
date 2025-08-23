@@ -1,0 +1,37 @@
+1. Setup Hadoop and Input Files
+Ensure Hadoop services are running:
+
+start-dfs.sh
+start-yarn.sh
+
+Create the input directory in HDFS:
+
+hdfs dfs -mkdir -p /user/maria_dev/input
+
+
+Upload the .gaf files to the HDFS input directory:
+
+
+hdfs dfs -put /root/input_files/*.gaf /user/maria_dev/input
+
+2. Verify Hadoop Streaming JAR Path
+Ensure the Hadoop Streaming JAR file exists:
+
+ls /usr/hdp/2.6.5.0-292/hadoop-mapreduce/hadoop-streaming.jar
+
+3. Run the MapReduce Job
+Execute the competence_feature_count.py script:
+
+
+python /root/competence_feature_count.py -r hadoop hdfs:///user/maria_dev/input/*.gaf \
+  --output-dir hdfs:///user/maria_dev/output \
+  --hadoop-streaming-jar /usr/hdp/2.6.5.0-292/hadoop-mapreduce/hadoop-streaming.jar
+
+
+4. Check the Output
+Verify the output directory:
+
+hdfs dfs -ls /user/maria_dev/output
+View the results:
+
+hdfs dfs -cat /user/maria_dev/output/part-00000
